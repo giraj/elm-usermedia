@@ -2,19 +2,10 @@
 elm wrapper for ```navigator.getUserMedia```
 
 ## usage
-See ```examples/Example.elm```.
+See ```examples/skeleton.elm``` for very basic usage.
 
-Basically, the ```elm UserMedia``` module exports some types needed
-to work with getUserMedia, and a function
-
+Basically, this module exports some types needed to work with user media, and a function
 ```elm
-requestUserMedia : Signal.Address (Maybe MediaStream) -> Options -> Task x ()
+getUserMedia : Options -> Task Error MediaStream
 ```
-
-which takes an address to a mailbox that will receive the ```MediaStream``` if the user accepts. ```Options``` correspond
-to
-[MediaStreamConstraints](http://w3c.github.io/mediacapture-main/getusermedia.html#mediastreamconstraints)
-(currently very partially implemented). Obtaining
-microphone/webcam stream is just a matter of initializing a
-mailbox and handing ```requestUserMedia mailbox.address
-options``` to a port.
+that can be made into an effect that asks for access to microphone, webcam or whatever the ```elm Options``` specify. 
