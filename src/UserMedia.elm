@@ -1,4 +1,16 @@
-module UserMedia where
+module UserMedia (getUserMedia, MediaStream, Options, Error) where
+
+{-|
+
+# Definition
+@docs getUserMedia
+
+# Types
+@docs MediaStream
+@docs Options
+@docs Error
+
+-}
 
 import Signal as S
 import Task as T
@@ -25,18 +37,14 @@ type alias MediaStream =
     , id:String
     }
 
-type alias MediaStreamError = {}
-
-
-{-| getUserMedia wrapper task that requests access to user media according to
-    options given and forwards the stream to the mailbox userMediaStream.
-
-    example:
-        userMedia : S.Mailbox (Maybe MediaStream)
-        userMedia = S.mailbox Nothing
-        port getUserMedia = requestUserMedia userMedia.address { audio=True, video=False }
+{-| todo: implement in native
 -}
-requestUserMedia : S.Address (Maybe MediaStream) -> Options -> T.Task x ()
-requestUserMedia address options =
-    T.toMaybe (Native.UserMedia.getUserMedia options)
-        `T.andThen` S.send address 
+type Error = AccessDenied
+
+{-| usage:
+    in your model allow for an action that takes an incoming MediaStream,
+    then create an effect from this task, and handle the succeeding action
+    see elm-usermedia/examples for more.
+-}
+getUserMedia : Options -> T.Task Error MediaStream
+getUserMedia = Native.UserMedia.getUserMedia
