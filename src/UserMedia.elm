@@ -37,7 +37,8 @@ type alias MediaStream =
     , id:String
     }
 
-{-| todo: implement in native
+{-| Error type: currently only possible failure considered is user denying the
+access request
 -}
 type Error = AccessDenied
 
