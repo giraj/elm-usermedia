@@ -1,8 +1,8 @@
 import UserMedia exposing (MediaStream, getUserMedia)
 import Html exposing (Html, text, div)
-import Task as T
-import Effects as E
-import Signal as S
+import Task
+import Effects
+import Signal
 import StartApp
 
 
@@ -15,13 +15,13 @@ corresponding to the response from the Effect of getting/requesting user media.
 
 type alias Model = Maybe MediaStream
 
-init : (Model, E.Effects Action)
+init : (Model, Effects.Effects Action)
 init =
     let request =
             getUserMedia { audio = True, video = False }
-                |> T.toMaybe
-                |> T.map Receive
-                |> E.task
+                |> Task.toMaybe
+                |> Task.map Receive
+                |> Effects.task
     in
         (Nothing, request)
 
@@ -31,17 +31,17 @@ type Action
     | NoOp
 
 
-update : Action -> Model -> (Model, E.Effects Action)
+update : Action -> Model -> (Model, Effects.Effects Action)
 update action model =
     case action of
         Receive mstream ->
-            (mstream, E.none)
+            (mstream, Effects.none)
 
         NoOp ->
-            (model, E.none)
+            (model, Effects.none)
 
 
-view : S.Address Action -> Model -> Html
+view : Signal.Address Action -> Model -> Html
 view address model =
     case model of
         Nothing ->
@@ -65,6 +65,6 @@ app =
 main =
     app.html
 
-port tasks : Signal (T.Task E.Never ())
+port tasks : Signal.Signal (Task.Task Effects.Never ())
 port tasks =
     app.tasks
